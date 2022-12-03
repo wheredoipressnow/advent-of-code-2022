@@ -1,10 +1,10 @@
 fun main() {
-    println(findHighestCalories(test1Input))
-    println(findHighestCalories(puzzle1Input))
-    println(findHighestCalories(puzzle1Input, 3))
+    println(findHighestCalories(TEST1_INPUT))
+    println(findHighestCalories(PUZZLE1_INPUT))
+    println(findHighestCalories(PUZZLE1_INPUT, 3))
 }
 
-fun findHighestCalories(input: String, n: Int = 1) =
+private fun findHighestCalories(input: String, n: Int = 1) =
     input.split("\n\n")
         .map { calories ->
             calories.split("\n")
@@ -14,7 +14,7 @@ fun findHighestCalories(input: String, n: Int = 1) =
         .sum()
 
 
-const val test1Input: String =
+private const val TEST1_INPUT: String =
     """1000
 2000
 3000
@@ -30,7 +30,7 @@ const val test1Input: String =
 
 10000"""
 
-const val puzzle1Input = """6758
+private const val PUZZLE1_INPUT = """6758
 5199
 10292
 8812
