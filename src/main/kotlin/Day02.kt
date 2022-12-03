@@ -31,8 +31,8 @@ private sealed interface HandShape {
     }
 }
 
-private fun mapToHandSign(sign: String): HandShape =
-    when (sign) {
+private fun mapToHandShape(character: String): HandShape =
+    when (character) {
         "A", "X" -> HandShape.Rock
         "B", "Y" -> HandShape.Paper
         "C", "Z" -> HandShape.Scissors
@@ -45,7 +45,7 @@ private fun Pair<HandShape, HandShape>.defaultStrategyGuide(): Int {
         hand1 == hand2 -> hand1.value + 3
         hand1 beats hand2 -> hand2.value
         hand2 beats hand1 -> hand2.value + 6
-        else -> error("Unexpected combination of hand signs")
+        else -> error("Unexpected combination of hand shape")
     }
 }
 
@@ -58,18 +58,18 @@ private fun Pair<HandShape, HandShape>.topSecretStrategyGuide(): Int {
     }
 }
 
-private fun playGame(rounds: String, strategy: (Pair<HandShape, HandShape>) -> Int) =
+private fun playTournament(rounds: String, scoringStrategy: (Pair<HandShape, HandShape>) -> Int) =
     rounds.split("\n")
         .map { it.split(" ") }
-        .map { Pair(mapToHandSign(it.first()), mapToHandSign(it.last())) }
-        .sumOf { strategy(it) }
+        .map { Pair(mapToHandShape(it.first()), mapToHandShape(it.last())) }
+        .sumOf { scoringStrategy(it) }
 
 fun main() {
-    println(playGame(TEST2_INPUT) { it.defaultStrategyGuide() })
-    println(playGame(PUZZLE2_INPUT) { it.defaultStrategyGuide() })
+    println(playTournament(TEST2_INPUT) { it.defaultStrategyGuide() })
+    println(playTournament(PUZZLE2_INPUT) { it.defaultStrategyGuide() })
 
-    println(playGame(TEST2_INPUT) { it.topSecretStrategyGuide() })
-    println(playGame(PUZZLE2_INPUT) { it.topSecretStrategyGuide() })
+    println(playTournament(TEST2_INPUT) { it.topSecretStrategyGuide() })
+    println(playTournament(PUZZLE2_INPUT) { it.topSecretStrategyGuide() })
 }
 
 private const val TEST2_INPUT: String =
