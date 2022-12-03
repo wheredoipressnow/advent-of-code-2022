@@ -41,7 +41,7 @@ fun mapToHandSign(sign: String): HandSign =
 private fun Pair<HandSign, HandSign>.points(): Int {
     val (hand1, hand2) = this
     return when {
-        hand1 == hand2 -> hand1.value + hand2.value
+        hand1 == hand2 -> hand1.value + 3
         hand1 beats hand2 -> hand2.value
         hand2 beats hand1 -> hand2.value + 6
         else -> error("something wrong")
@@ -50,10 +50,10 @@ private fun Pair<HandSign, HandSign>.points(): Int {
 
 fun main() {
     println(playGame(test2Input))
-    println(playGame(puzzle2Input))
+    println(playGame(puzzle2Input)) // 13484
 }
 
-private fun playGame(input: String) =
+fun playGame(input: String) =
     input.split("\n")
         .map { it.split(" ") }
         .map { Pair(mapToHandSign(it.first()), mapToHandSign(it.last())) }
