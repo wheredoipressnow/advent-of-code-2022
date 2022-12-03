@@ -1,7 +1,7 @@
 fun main() {
-    println(findHighestCalories(testInput))
-    println(findHighestCalories(puzzleInput))
-    println(findHighestCalories(puzzleInput, 3))
+    println(findHighestCalories(test1Input))
+    println(findHighestCalories(puzzle1Input))
+    println(findHighestCalories(puzzle1Input, 3))
 }
 
 fun findHighestCalories(input: String, n: Int = 1) =
@@ -14,7 +14,7 @@ fun findHighestCalories(input: String, n: Int = 1) =
         .sum()
 
 
-const val testInput: String =
+const val test1Input: String =
     """1000
 2000
 3000
@@ -30,7 +30,7 @@ const val testInput: String =
 
 10000"""
 
-const val puzzleInput = """6758
+const val puzzle1Input = """6758
 5199
 10292
 8812
