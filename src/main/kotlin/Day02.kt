@@ -1,72 +1,83 @@
-import HandSign.Paper.beats
+import HandShape.Paper.beats
+import HandShape.Rock.defeatedBy
 
-sealed interface HandSign {
-
+private sealed interface HandShape {
     val value: Int
-    val winsOver: HandSign
+    val defeats: HandShape
 
-    infix fun HandSign.beats(other: HandSign): Boolean = this.winsOver == other
+    infix fun HandShape.beats(other: HandShape): Boolean = this.defeats == other
 
-    object Rock : HandSign {
+    fun HandShape.defeatedBy(): HandShape = this.defeats.defeats
+
+    object Rock : HandShape {
         override val value: Int
             get() = 1
-        override val winsOver: HandSign
+        override val defeats: HandShape
             get() = Scissors
     }
 
-    object Paper : HandSign {
+    object Paper : HandShape {
         override val value: Int
             get() = 2
-        override val winsOver: HandSign
+        override val defeats: HandShape
             get() = Rock
     }
 
-    object Scissors : HandSign {
+    object Scissors : HandShape {
         override val value: Int
             get() = 3
-        override val winsOver: HandSign
+        override val defeats: HandShape
             get() = Paper
     }
 }
 
-fun mapToHandSign(sign: String): HandSign =
+private fun mapToHandSign(sign: String): HandShape =
     when (sign) {
-        "A", "X" -> HandSign.Rock
-        "B", "Y" -> HandSign.Paper
-        "C", "Z" -> HandSign.Scissors
+        "A", "X" -> HandShape.Rock
+        "B", "Y" -> HandShape.Paper
+        "C", "Z" -> HandShape.Scissors
         else -> error("Invalid hand")
     }
 
-
-private fun Pair<HandSign, HandSign>.points(): Int {
+private fun Pair<HandShape, HandShape>.defaultStrategyGuide(): Int {
     val (hand1, hand2) = this
     return when {
         hand1 == hand2 -> hand1.value + 3
         hand1 beats hand2 -> hand2.value
         hand2 beats hand1 -> hand2.value + 6
-        else -> error("something wrong")
+        else -> error("Unexpected combination of hand signs")
     }
 }
 
-fun main() {
-    println(playGame(test2Input))
-    println(playGame(puzzle2Input)) // 13484
+private fun Pair<HandShape, HandShape>.topSecretStrategyGuide(): Int {
+    val (hand1, hand2) = this
+    return when (hand2) {
+        HandShape.Rock -> hand1.defeats.value
+        HandShape.Paper -> hand1.value + 3
+        HandShape.Scissors -> hand1.defeatedBy().value + 6
+    }
 }
 
-fun playGame(input: String) =
-    input.split("\n")
+private fun playGame(rounds: String, strategy: (Pair<HandShape, HandShape>) -> Int) =
+    rounds.split("\n")
         .map { it.split(" ") }
         .map { Pair(mapToHandSign(it.first()), mapToHandSign(it.last())) }
-        .sumOf { it.points() }
-//        .map{it.points()}
+        .sumOf { strategy(it) }
 
+fun main() {
+    println(playGame(TEST2_INPUT) { it.defaultStrategyGuide() })
+    println(playGame(PUZZLE2_INPUT) { it.defaultStrategyGuide() })
 
-const val test2Input: String =
+    println(playGame(TEST2_INPUT) { it.topSecretStrategyGuide() })
+    println(playGame(PUZZLE2_INPUT) { it.topSecretStrategyGuide() })
+}
+
+private const val TEST2_INPUT: String =
     """A Y
 B X
 C Z"""
 
-const val puzzle2Input: String =
+private const val PUZZLE2_INPUT: String =
     """C X
 C Y
 C X
