@@ -31,11 +31,11 @@ private sealed interface HandShape {
     }
 }
 
-private fun mapToHandShape(character: String): HandShape =
+private fun mapToHandShape(character: Char): HandShape =
     when (character) {
-        "A", "X" -> HandShape.Rock
-        "B", "Y" -> HandShape.Paper
-        "C", "Z" -> HandShape.Scissors
+        'A', 'X' -> HandShape.Rock
+        'B', 'Y' -> HandShape.Paper
+        'C', 'Z' -> HandShape.Scissors
         else -> error("Invalid hand")
     }
 
@@ -60,7 +60,6 @@ private fun Pair<HandShape, HandShape>.topSecretStrategyGuide(): Int {
 
 private fun playTournament(rounds: String, scoringStrategy: (Pair<HandShape, HandShape>) -> Int) =
     rounds.split("\n")
-        .map { it.split(" ") }
         .map { Pair(mapToHandShape(it.first()), mapToHandShape(it.last())) }
         .sumOf { scoringStrategy(it) }
 
